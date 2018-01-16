@@ -1,0 +1,59 @@
+{
+  "members1": [
+    {
+      "type": "uwnetid",
+      "id": "mattjm"
+    },
+    {
+      "type": "dns",
+      "id": "thor.cac.washington.edu"
+    },
+    {
+      "type": "group",
+      "id": "u_mattjm"
+    }
+  ],
+  "members2": [
+    {
+      "type": "uwnetid",
+      "id": "joeuser"
+    },
+    {
+      "type": "uwnetid",
+      "id": "lisas22g"
+    }
+  ],
+  "google_affiliate_1": {
+    "name": "google",
+    "status": "active",
+    "senders": ""
+  },
+  "google_affiliate_2": {
+    "name": "google",
+    "status": "active",
+    "senders": "member"
+
+  },
+  "google_affiliate_9": {
+    "name": "google",
+    "status": "inactive",
+    "senders": ""
+  },
+  "email_affiliate_1": {
+    "name": "email",
+    "status": "active",
+    "senders": ""
+  },
+  "email_affiliate_2": {
+    "name": "email",
+    "status": "active",
+    "senders": [
+      "dc=all"
+    ]
+  },
+  "email_affiliate_9": {
+    "name": "email",
+    "status": "inactive",
+    "senders": ""
+  }
+}

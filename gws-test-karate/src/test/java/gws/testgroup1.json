@@ -1,0 +1,47 @@
+{
+  "verify": {
+    "meta": {
+      "resourceType": "group",
+      "selfRef": "#present",
+      "memberRef": "#present"
+    },
+    "data": {
+      "regid": "#? _.length == 32",
+      "dependsOn": "#present",
+      "created": "#? _ > start_time",
+      "lastModified": "#? _ > start_time",
+      "lastMemberModified": "0",
+      "gid": "#? _ > 0"
+    }
+  },
+  "put": {
+    "data": {
+      "id": "u_mattjm_jsontests_gwstest1",
+      "displayName": "mattjm's json autotest group 1",
+      "description": "This is a general purpose group for testing various Group Service functionality.",
+      "contact": "mattjm",
+      "authnFactor": "1",
+      "classification": "u",
+      "dependsOn": "uw_employee",
+      "admins": [
+        {
+          "type": "dns",
+          "id": "urizen3.cac.washington.edu",
+          "name": "urizen3.cac.washington.edu"
+        },
+        {
+          "type": "uwnetid",
+          "id": "mattjm",
+          "name": "Matthew MacAdam"
+        }
+      ],
+      "updaters": [
+        {
+          "type": "eppn",
+          "id": "mail@mattjm.com",
+          "name": "mail@mattjm.com"
+        }
+      ]
+    }
+  }
+}
