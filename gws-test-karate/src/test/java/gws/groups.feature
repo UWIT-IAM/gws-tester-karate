@@ -9,19 +9,19 @@ Feature: sample karate test script
     Refer to the Cucumber-Eclipse wiki for more: http://bit.ly/2mDaXeV
 
 Background:
-  * url 'https://iam-ws.u.washington.edu/group_sws/v3'
+
+  * url BaseURL
   * configure headers = { 'Accept': 'application/json' ,'Content-type': 'application/json'}
   * def testgroup1 = read('testgroup1.json')
   * def testgroup2 = read('testgroup2.json')
-  * def testgroup1_temp = read('testgroup1.json').put
-  * def testgroup2_temp = read('testgroup2.json').put
   * def members = read('members.json')
-  * def schema = 'urn:mace:washington.edu:schemas:groups:1.0'
   * def getTime =
   """
   function() {return Date.now();}
   """
   * def start_time = getTime()
+
+
 Scenario: Create, verify, and delete a group
 
   * print 'Make sure clean up ran last time'
@@ -38,18 +38,14 @@ Scenario: Create, verify, and delete a group
   Given path 'group', testgroup1.put.data.id
   When method get
   Then status 200
-  # update if number of elements changes
-  Then match response.data.admins[*] contains testgroup1.put.data.admins[0,1]
-  Then match response.data.updaters[*] contains testgroup1.put.data.updaters[0]
-  # set to ignore before matching the entire payload, otherwise out of order elements cause error
-  * set testgroup1_temp $.data.admins = '#ignore'
-  * set testgroup1_temp $.data.updaters = '#ignore'
-  # verify put data
-  And match response.data contains testgroup1_temp.data
-  # verify data--calculated or programmatic
-  And match response.data contains testgroup2.verify.data
-  And match response.schemas contains schema
-  And match response.meta contains testgroup2.verify.meta
+  # assemble test data and response
+  * def args = {testdata: '#(testgroup1)', responsedata: '#(response)'}
+  # pass test data and response to verifier feature
+  And call read('classpath:groups_meta.feature') args
+  # the following are optional so aren't in the main verify function
+  And match response.data.updaters[*] contains testgroup1.put.data.updaters[0]
+  And match response.data.dependsOn contains testgroup1.put.data.dependsOn
+
 
   * print 'delete the group'
   Given path 'group', testgroup1.put.data.id
@@ -93,15 +89,10 @@ Scenario: Create group, add affiliates and test, google_affiliate_1
   Given path 'group', testgroup2.put.data.id
   When method get
   Then status 200
-  # update if number of elements changes
-  Then match response.data.admins[*] contains testgroup2.put.data.admins[0,1]
-  # set to ignore before matching the entire payload, otherwise out of order elements cause error
-  * set testgroup2_temp $.data.admins = '#ignore'
-  And match response.data contains testgroup2_temp.data
-  # verify data--calculated or programmatic
-  And match response.data contains testgroup2.verify.data
-  And match response.schemas contains schema
-  And match response.meta contains testgroup2.verify.meta
+  # assemble test data and response
+  * def args = {testdata: '#(testgroup2)', responsedata: '#(response)'}
+  # pass test data and response to verifier feature
+  And call read('classpath:groups_meta.feature') args
 
 
   # add google affiliate 2
@@ -117,33 +108,68 @@ Scenario: Create group, add affiliates and test, google_affiliate_1
     Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_2.name
     When method get
     Then status 200
-    And match response.schemas contains schema
+    And match response.schemas contains testgroup2.schema
     And match response.meta.resourceType == 'affiliate'
-  # TODO fix this -- should match URL but I'm not sure how to build it
-    And match response.meta.selfRef == '#present'
+    And match response.meta.selfRef contains  BaseURL + '/group/' + testdata.put.data.id + '/affiliate/' + members.google_affiliate_2.name
     And match response.data.name == members.google_affiliate_2.name
     And match response.data.status == members.google_affiliate_2.status
     And match response.data.senders[0].type == 'set'
 
 
+  Given path 'group', testgroup2.put.data.id
+  When method get
+  Then status 200
+  # assemble test data and response
+  * def args = {testdata: '#(testgroup2)', responsedata: '#(response)'}
+  # pass test data and response to verifier feature
+  And call read('classpath:groups_meta.feature') args
+
+  * print 'delete the group'
+  Given path 'group', testgroup2.put.data.id
+  When method delete
+  Then status 200
+
+Scenario: Create group, add members, change members, verify,
+
+  # create group
+  * print 'create the group'
+  Given path 'group', testgroup2.put.data.id
+  And request testgroup2.put
+  When method put
+  Then status 201
+
   * print 'verify the group'
   Given path 'group', testgroup2.put.data.id
   When method get
   Then status 200
-  # update if number of elements changes
-  * print testgroup2.put.data.admins
-  Then match response.data.admins[*] contains testgroup2.put.data.admins[0,1]
-  # set to ignore before matching the entire payload, otherwise out of order elements cause error
-  * set testgroup2_temp $.data.admins = '#ignore'
-  And match response.data contains testgroup2_temp.data
-  # verify data--calculated or programmatic
-  And match response.data contains testgroup2.verify.data
-  And match response.schemas contains schema
-  And match response.meta contains testgroup2.verify.meta
+  # assemble test data and response
+  * def args = {testdata: '#(testgroup2)', responsedata: '#(response)'}
+  # pass test data and response to verifier feature
+  And call read('classpath:groups_meta.feature') args
 
-    * print 'delete the group'
-    Given path 'group', testgroup2.put.data.id
-    When method delete
-    Then status 200
+  # add members
+  * def members_list = members.members1[0].id + ',' + members.members1[1].id + ',' + members.members1[2].id
+  Given path 'group', testgroup2.put.data.id, 'member', members_list
+  Given param synchronized = ''
+  # karate requires payload for put, but GWS doesn't require one
+  And request ''
+  When method put
+  Then status 200
 
+  # verify members
+  Given path 'group', testgroup2.put.data.id, 'member'
+  When method get
+  Then status 200
+  And match response.schemas contains testgroup2.schema
+  And match response.meta.resourceType == 'members'
+  And match response.meta.id == testgroup2.put.data.id
+  And match response.meta.selfRef contains BaseURL + '/group/' + testgroup2.put.data.id + '/member'
+  And match response.meta.type == 'direct'
+  And match response.meta.version == 'v3.0'
+  And match response.meta.regid == '#? _.length == 32'
+  And match response.data contains members.members1[0,1,2]
 
+  # delete group
+  Given path 'group', testgroup2.put.data.id
+  When method delete
+  Then status 200

@@ -1,0 +1,28 @@
+function() {    
+  var env = karate.env; // get system property 'karate.env'
+  karate.log('karate.env system property was:', env);
+  if (!env) {
+    env = 'dev';
+  }
+  var config = {
+    env: env,
+	myVarName: 'someValue',
+    BaseURL: 'https://iam-ws.u.washington.edu/group_sws/v3'
+  }
+  if (env == 'dev') {
+    // customize
+    // e.g. config.foo = 'bar';
+  } else if (env == 'e2e') {
+    // customize
+  }
+ //karate.configure('ssl', true);
+  //var certConfig = {rootcert: 'C:/Users/mattjm/Documents/spregworking/uwca.crt', privatekey:'C:/Users/mattjm/Documents/spregworking/urizen3.key', publickey:'C:/Users/mattjm/Documents/spregworking/urizen3.crt'};
+    var certConfig = {
+       // classpath is the same folder as this file
+       keyStore: 'classpath:pkcs12.pfx',
+       password: 'secret',
+       type: 'pkcs12'};
+    karate.configure('ssl', certConfig)
+
+    return config;
+}

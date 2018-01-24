@@ -1,13 +1,11 @@
 {
+  "schema": "urn:mace:washington.edu:schemas:groups:1.0",
   "verify": {
     "meta": {
-      "resourceType": "group",
-      "selfRef": "#present",
-      "memberRef": "#present"
+      "resourceType": "group"
     },
     "data": {
       "regid": "#? _.length == 32",
-      "dependsOn": "#present",
       "created": "#? _ > start_time",
       "lastModified": "#? _ > start_time",
       "lastMemberModified": "0",
