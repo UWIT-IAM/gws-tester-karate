@@ -1,4 +1,4 @@
-Feature:  Verifies group metadata, admins, and updaters
+Feature:  Verifies group metadata, admins, and updaters (called from other features)
 
 Background:
 
