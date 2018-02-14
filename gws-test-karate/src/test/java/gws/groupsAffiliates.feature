@@ -1,3 +1,4 @@
+@ignore
 Feature: sample karate test script
   If you are using Eclipse, install the free Cucumber-Eclipse plugin from
   https://cucumber.io/cucumber-eclipse/
@@ -26,6 +27,7 @@ Background:
   """
   function(x) {
     java.lang.Thread.sleep(x);
+    karate.log('sleeping');
   }
   """
 
@@ -124,6 +126,7 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   And match response.meta.selfRef contains  BaseURL + '/group/' + testdata.put.data.id + '/affiliate/' + members.google_affiliate_9.name
   And match response.data.name == members.google_affiliate_9.name
   And match response.data.status == members.google_affiliate_9.status
+  And match response.data.senders == []
 
   #set email affiliate 1
   Given path 'group', testgroup2.put.data.id, 'affiliate', members.email_affiliate_1.name
@@ -138,6 +141,9 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   Given path 'group', testgroup2.put.data.id, 'affiliate', members.email_affiliate_1.name
   When method get
   Then status 200
+  And match response.schemas contains testgroup2.schema
+  And match response.meta.resourceType == 'affiliate'
+  And match response.meta.selfRef contains  BaseURL + '/group/' + testdata.put.data.id + '/affiliate/' + members.email_affiliate_1.name
   And match response.data.name == members.email_affiliate_1.name
   And match response.data.status == members.email_affiliate_1.status
   And match response.data.senders == []
@@ -151,9 +157,58 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   # pass test data and response to verifier feature
   And call read('classpath:groups_meta.feature') args
   And match response.data.affiliates[*].name contains members.email_affiliate_1.name
-  
-  
-* print 'delete the group'
+
+  #set email affiliate 2
+
+  Given path 'group', testgroup2.put.data.id, 'affiliate', members.email_affiliate_2.name
+  Given param status = members.email_affiliate_2.status
+  And param sender = members.email_affiliate_2.senders[0]
+  # karate requires payload for put, but GWS doesn't require one
+  And request ''
+  When method put
+  Then status 200
+
+   # verify email affiliate 2 added (query affiliate endpoint)
+  Given path 'group', testgroup2.put.data.id, 'affiliate', members.email_affiliate_2.name
+  When method get
+  Then status 200
+  And match response.schemas contains testgroup2.schema
+  And match response.meta.resourceType == 'affiliate'
+  And match response.meta.selfRef contains  BaseURL + '/group/' + testdata.put.data.id + '/affiliate/' + members.email_affiliate_2.name
+  And match response.data.name == members.email_affiliate_2.name
+  And match response.data.status == members.email_affiliate_2.status
+  And match response.data.senders contains {"type":"set","id":"all"}
+
+  # verify group metadata (query main group endpoint)
+  Given path 'group', testgroup2.put.data.id
+  When method get
+  Then status 200
+  # assemble test data and response
+  * def args = {testdata: '#(testgroup2)', responsedata: '#(response)'}
+  # pass test data and response to verifier feature
+  And call read('classpath:groups_meta.feature') args
+  And match response.data.affiliates[*].name contains members.email_affiliate_2.name
+
+  # clear email affiliate
+  Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_9.name
+  Given param status = members.google_affiliate_9.status
+  And param sender = members.google_affiliate_9.senders
+  # karate requires payload for put, but GWS doesn't require one
+  And request ''
+  When method put
+  Then status 200
+
+  # verify history
+  Given path 'group', testgroup2.put.data.id, 'history'
+  When method get
+  Then status 200
+  And match response.schemas contains testgroup2.schema
+  And match response.meta.resourceType == 'history'
+  And match response.meta.selfRef == BaseURL + '/group/' + testgroup2.put.data.id + '/history'
+  And match response.data[*].description contains 'set affiliate \'google\' to inactive'
+  And match response.data[*].description contains 'set affiliate \'google\' to active (forward=sender=member)'
+
+* print 'affiliate cleanup:  delete the group'
 Given path 'group', testgroup2.put.data.id
 When method delete
 Then status 200

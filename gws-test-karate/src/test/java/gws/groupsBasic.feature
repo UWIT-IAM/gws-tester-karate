@@ -1,4 +1,5 @@
-Feature: sample karate test script    
+@ignore
+Feature: sample karate test script
     If you are using Eclipse, install the free Cucumber-Eclipse plugin from
     https://cucumber.io/cucumber-eclipse/
     Then you will see syntax-coloring for this file. But best of all,
