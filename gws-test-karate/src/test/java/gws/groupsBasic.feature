@@ -1,4 +1,3 @@
-@ignore
 Feature: sample karate test script
     If you are using Eclipse, install the free Cucumber-Eclipse plugin from
     https://cucumber.io/cucumber-eclipse/
