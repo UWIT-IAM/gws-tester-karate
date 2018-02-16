@@ -1,16 +1,9 @@
-Feature: ported from uwebinject
+Feature: ported from uwebinject, basic group manipulation tests
 
   Background:
 
     * url BaseURL
     * configure headers = { 'Accept': 'application/json' ,'Content-type': 'application/json'}
-    * def testgroup2 = read('testgroup2.json')
-    * def members = read('members.json')
-    * def getTime =
-  """
-  function() {return Date.now();}
-  """
-    * def start_time = getTime()
     * def groupid = BaseGroup + 'webinject'
     * def certid = CertificateName
     * def netidadmin = AdminNetidUser
