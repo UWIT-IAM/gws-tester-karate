@@ -1,13 +1,5 @@
-@ignore
-Feature: sample karate test script
-  If you are using Eclipse, install the free Cucumber-Eclipse plugin from
-  https://cucumber.io/cucumber-eclipse/
-  Then you will see syntax-coloring for this file. But best of all,
-  you will be able to right-click within this file and [Run As -> Cucumber Feature].
-  If you see warnings like "does not have a matching glue code",
-  go to the Eclipse preferences, find the 'Cucumber User Settings'
-  and enter the following Root Package Name: com.intuit.karate
-  Refer to the Cucumber-Eclipse wiki for more: http://bit.ly/2mDaXeV
+# ported from Jim's Python tester, also added tests from uwebinject suite
+Feature: groups affiliate (exchange and google) tests
 
 
 
@@ -41,13 +33,50 @@ When method delete
 
 
   # create group
-* print 'create the group'
+* print 'create the group for affiliate testing'
 Given path 'group', testgroup2.put.data.id
 And request testgroup2.put
 When method put
 Then status 201
 
-  # add google affiliate 1
+* print 'put undefined affiliation is prevented'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', 'bogus'
+  And request ''
+  When method put
+  Then status 400
+
+
+  * print 'put affiliation with missing status is prevented'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', 'google'
+  And request ''
+  When method put
+  Then status 400
+
+  * print 'put affiliation with bogus status is prevented'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', 'google'
+  Given param status = 'bogus'
+  And request ''
+  When method put
+  Then status 400
+
+  * print 'add google affiliate 1 with inactive status'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_1.name
+  Given param status = 'inactive'
+  And param sender = members.google_affiliate_1.senders
+  # karate requires payload for put, but GWS doesn't require one
+  And request ''
+  When method put
+  Then status 200
+
+  * print 'verify google affiliate 1 inactive status'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_1.name
+  When method get
+  Then status 200
+  And match response.data.name == members.google_affiliate_1.name
+  And match response.data.status == 'inactive'
+  And match response.data.senders == []
+
+* print 'update google affiliate 1 to active status'
 Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_1.name
 Given param status = members.google_affiliate_1.status
 And param sender = members.google_affiliate_1.senders
@@ -56,7 +85,8 @@ And request ''
 When method put
 Then status 200
 
-  # verify google affiliate 1 added (query affiliate endpoint)
+
+* print 'verify google affiliate 1 added (query affiliate endpoint) and active status'
 Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_1.name
 When method get
 Then status 200
@@ -198,6 +228,22 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   When method put
   Then status 200
 
+  * print 'Put uwnetid affiliate with inactive status is successful'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', 'netid'
+  Given param status = 'inactive'
+  # karate requires payload for put, but GWS doesn't require one
+  And request ''
+  When method put
+  Then status 200
+
+  * print 'affiliate search is successful'
+  Given path 'search'
+  Given param affiliate = 'google'
+  # karate requires payload for put, but GWS doesn't require one
+  When method get
+  Then status 200
+  And match response.data[*].id contains testgroup2.put.data.id
+
   # verify history
   Given path 'group', testgroup2.put.data.id, 'history'
   When method get
@@ -208,7 +254,22 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   And match response.data[*].description contains 'set affiliate \'google\' to inactive'
   And match response.data[*].description contains 'set affiliate \'google\' to active (forward=sender=member)'
 
+  * print 'Delete google affiliate succeeds'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', 'google'
+  When method delete
+  Then status 200
+
 * print 'affiliate cleanup:  delete the group'
 Given path 'group', testgroup2.put.data.id
 When method delete
 Then status 200
+
+  * print 'Cleanup: Following group deletion, google affiliate is automatically deleted'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', 'google'
+  When method get
+  Then status 404
+
+  * print 'Cleanup: Following group deletion, netid affiliate is automatically deleted'
+  Given path 'group', testgroup2.put.data.id, 'affiliate', 'netid'
+  When method get
+  Then status 404

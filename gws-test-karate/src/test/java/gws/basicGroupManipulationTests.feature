@@ -1,4 +1,5 @@
-Feature: ported from uwebinject, basic group manipulation tests
+# ported from uwebinject
+Feature: basic group manipulation tests
 
   Background:
 
@@ -17,31 +18,31 @@ Feature: ported from uwebinject, basic group manipulation tests
     Given path 'group', groupid
     When method delete
 
-  # PUT with no body is prevented
+  * print 'PUT with no body is prevented'
   Given path 'group', groupid
   And request ''
   When method put
   Then status 400
 
-  # Put group with no admins class is prevented
+  * print 'Put group with no admins class is prevented'
   Given path 'group', groupid
   And request { data: { id: '#(groupid)', description: webinject testing } }
   When method put
   Then status 400
 
-  # Put group with empty admins class is prevented
+  * print 'Put group with empty admins class is prevented'
     Given path 'group', groupid
     And request { data: { id: '#(groupid)', description: webinject testing, admins: [] } }
     When method put
     Then status 400
     
-  # Correctly formed PUT creates group successfully
+  * print 'Correctly formed PUT creates group successfully'
     Given path 'group', groupid
     And request { data: { id: '#(groupid)', description: webinject testing, admins: [ {type: dns, id: '#(certid)', name: '#(certid)' } ] } }
     When method put
     Then status 201
 
-    # A GET finds the group successfully (and it has the supplied ETag)
+  * print 'A GET finds the group successfully (and it has the supplied ETag)'
     Given path 'group', groupid
     When method get
     Then status 200

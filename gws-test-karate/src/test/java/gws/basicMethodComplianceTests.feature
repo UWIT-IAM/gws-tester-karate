@@ -1,4 +1,5 @@
-Feature: ported from uwebinject, basic method compliance tests
+# ported from uwebinject
+Feature: basic method compliance tests
 
   Background:
 
@@ -66,7 +67,7 @@ Feature: ported from uwebinject, basic method compliance tests
     Then status 400
 
     # todo 500 right now
-    #* print 'GET at search root is allowed'
+    * print 'GET at search root is allowed'
     #Given path 'search', '/'
     #When method get
     #Then status 200
