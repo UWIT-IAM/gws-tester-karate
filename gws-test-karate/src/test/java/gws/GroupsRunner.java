@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Karate.class)
 //to run only a single feature
-@CucumberOptions(features = "classpath:gws/basicGroupManipulationTests.feature")
+@CucumberOptions(features = "classpath:gws/basicMethodComplianceTests.feature")
 public class GroupsRunner {
 
 }
