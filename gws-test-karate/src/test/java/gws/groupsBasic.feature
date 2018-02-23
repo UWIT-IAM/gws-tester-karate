@@ -4,7 +4,7 @@ Feature: Basic group tests
 Background:
 
   * url BaseURL
-  * configure headers = { 'Accept': 'application/json' ,'Content-type': 'application/json'}
+  * configure headers = { 'Accept': 'application/json', 'Content-type': 'application/json'}
   * def testgroup1 = read('testgroup1.json')
   * def testgroup2 = read('testgroup2.json')
   * def members = read('members.json')

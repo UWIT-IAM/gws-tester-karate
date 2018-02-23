@@ -6,7 +6,7 @@ Feature: basic group manipulation tests
     * url BaseURL
     * configure headers = { 'Accept': 'application/json' ,'Content-type': 'application/json'}
     * def groupid = BaseGroup + 'webinject'
-    * def certid = CertificateName
+    * def certid = CertificateNode
     * def netidadmin = AdminNetidUser
     # etag is just a timestamp in milliseconds.  This range is good 02/2018 through sometime in 2038
     * def minEtag = 1518736574921
@@ -38,7 +38,7 @@ Feature: basic group manipulation tests
     
   * print 'Correctly formed PUT creates group successfully'
     Given path 'group', groupid
-    And request { data: { id: '#(groupid)', description: webinject testing, admins: [ {type: dns, id: '#(certid)', name: '#(certid)' } ] } }
+    And request { data: { id: '#(groupid)', description: webinject testing, admins: [ '#(certid)'  ] } }
     When method put
     Then status 201
 
@@ -56,7 +56,7 @@ Feature: basic group manipulation tests
     Then status 304
 
   # Modify group - add admin succeeds
-    * def payload = { data: { id: '#(groupid)', description: webinject testing, admins: [ {type: dns, id: '#(certid)', name: '#(certid)' } ] } }
+    * def payload = { data: { id: '#(groupid)', description: webinject testing, admins: [ '#(certid)'  ] } }
     * set payload.data.admins[] = netidadmin
     Given path 'group', groupid
     And request payload

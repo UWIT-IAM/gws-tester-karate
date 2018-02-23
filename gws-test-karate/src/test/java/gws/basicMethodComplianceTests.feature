@@ -6,7 +6,6 @@ Feature: basic method compliance tests
     * url BaseURL
     * configure headers = { 'Accept': 'application/json' ,'Content-type': 'application/json'}
     * def groupid = BaseGroup + 'webinject'
-    * def certid = CertificateName
     * def netidadmin = AdminNetidUser
     # etag is just a timestamp in milliseconds.  This range is good 02/2018 through sometime in 2038
     * def minEtag = 1518736574921

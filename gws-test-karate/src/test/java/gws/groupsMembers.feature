@@ -16,6 +16,11 @@ Feature: group member manipulation tests
 
 Scenario: Create group, add members, change members, verify,
 
+  # delete group before starting
+  Given path 'group', testgroup2.put.data.id
+  When method delete
+
+
   # create group
 * print 'create the group'
 Given path 'group', testgroup2.put.data.id
@@ -61,17 +66,9 @@ And param synchronized = ''
 And request payload
 When method put
 Then status 200
+# notFound should be blank
+And match response.response.notFound == []
 
-  # TODO currently broken on server side
-  # verify members
-  #And match response.schemas contains testgroup2.schema
-  #And match response.meta.resourceType == 'members'
-  #And match response.meta.id == testgroup2.put.data.id
-  #And match response.meta.selfRef contains BaseURL + '/group/' + testgroup2.put.data.id + '/member'
-  #And match response.meta.type == 'direct'
-  #And match response.meta.version == 'v3.0'
-  #And match response.meta.regid == '#? _.length == 32'
-  #And match response.data contains members.members2[0,1]
 
   # delete group
 Given path 'group', testgroup2.put.data.id
