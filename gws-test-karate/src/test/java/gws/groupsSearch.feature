@@ -53,7 +53,7 @@ When method get
 Then status 200
 And match response.schemas contains testgroup2.schema
 And match response.meta.resourceType == 'search'
-And match response.meta.selfRef == BaseURL + '/search'
+And match response.meta.selfRef == BaseURL + '/search/'
 And match response.data[*].id contains testgroup1.put.data.id
 And match response.data[*].id contains testgroup2.put.data.id
 

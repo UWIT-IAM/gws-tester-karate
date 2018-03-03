@@ -114,6 +114,15 @@ And request ''
 When method put
 Then status 200
 
+
+  * print 'affiliate search is successful'
+  Given path 'search'
+  Given param affiliate = 'google'
+  # karate requires payload for put, but GWS doesn't require one
+  When method get
+  Then status 200
+  And match response.data[*].id contains testgroup2.put.data.id
+
   # verify google affiliate 2
 Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_2.name
 When method get
@@ -135,8 +144,7 @@ Then status 200
   # pass test data and response to verifier feature
 And call read('classpath:groups_meta.feature') args
 And match response.data.affiliates[*].name contains members.google_affiliate_1.name
-# TODO following fails right now
-# And match response.data.affiliates contains {"type": "set", "id": "member"}
+ And match response.data.affiliates[*].senders[*] contains {"type": "set", "id": "member"}
 
     # clear google affiliate
   Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_9.name
@@ -236,13 +244,6 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   When method put
   Then status 200
 
-  * print 'affiliate search is successful'
-  Given path 'search'
-  Given param affiliate = 'google'
-  # karate requires payload for put, but GWS doesn't require one
-  When method get
-  Then status 200
-  And match response.data[*].id contains testgroup2.put.data.id
 
   # verify history
   Given path 'group', testgroup2.put.data.id, 'history'
@@ -250,7 +251,7 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   Then status 200
   And match response.schemas contains testgroup2.schema
   And match response.meta.resourceType == 'history'
-  And match response.meta.selfRef == BaseURL + '/group/' + testgroup2.put.data.id + '/history'
+  And match response.meta.selfRef == BaseURL + '/group/' + testgroup2.put.data.id + '/history/'
   And match response.data[*].description contains 'set affiliate \'google\' to inactive'
   And match response.data[*].description contains 'set affiliate \'google\' to active (forward=sender=member)'
 
@@ -259,11 +260,10 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   When method delete
   Then status 200
 
-  #todo fails
 * print 'affiliate cleanup:  delete the group'
-#Given path 'group', testgroup2.put.data.id
-#When method delete
-#Then status 200
+Given path 'group', testgroup2.put.data.id
+When method delete
+Then status 200
 
   * print 'Cleanup: Following group deletion, google affiliate is automatically deleted'
   Given path 'group', testgroup2.put.data.id, 'affiliate', 'google'

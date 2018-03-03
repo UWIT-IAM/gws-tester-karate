@@ -17,11 +17,18 @@ Feature: basic method compliance tests
     Given path 'group', groupid
     When method delete
 
-    #todo
-  # GET at root is allowed
-    #Given path
-    #When method get
-    #Then status 200
+    # GET at root is allowed
+    Given url 'https://iam-ws.u.washington.edu/group_sws'
+    And path '/'
+    When method get
+    Then status 200
+
+
+    # GET at root version is allowed
+    Given url BaseURL
+    And path ''
+    When method get
+    Then status 200
 
     # post at root is prevented
     Given path ''
@@ -65,11 +72,11 @@ Feature: basic method compliance tests
     When method delete
     Then status 400
 
-    # todo 500 right now
+
     * print 'GET at search root is allowed'
-    #Given path 'search', '/'
-    #When method get
-    #Then status 200
+    Given path 'search', '/'
+    Then method get
+    Then status 200
 
     * print 'post at search root is prevented'
     Given path 'search', '/'
