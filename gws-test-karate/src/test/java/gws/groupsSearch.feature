@@ -48,7 +48,7 @@ Then status 200
 # search for group
 Given path 'search'
 And param scope = 'one'
-And param stem = 'u_mattjm_jsontests'
+And param stem = 'uw_iam_gws-test'
 When method get
 Then status 200
 And match response.schemas contains testgroup2.schema
