@@ -28,6 +28,7 @@ Scenario: Create, verify, and delete a group
   Then status 201
 
   * print 'verify the group'
+    * print start_time
   Given path 'group', testgroup1.put.data.id
   When method get
   Then status 200
@@ -38,6 +39,39 @@ Scenario: Create, verify, and delete a group
   # the following are optional so aren't in the main verify function
   And match response.data.updaters[*] contains testgroup1.put.data.updaters[0]
   And match response.data.dependsOn contains testgroup1.put.data.dependsOn
+
+  * print 'add an affiliate--testing some permissions'
+  Given path 'group', testgroup1.put.data.id, 'affiliate', members.email_affiliate_1.name
+  Given param status = members.email_affiliate_1.status
+  And param sender = members.email_affiliate_1.senders
+  # karate requires payload for put, but GWS doesn't require one
+  And request ''
+  When method put
+  Then status 200
+
+
+  * print 'get the group via the group edit endpoint'
+  Given path 'group', testgroup1.put.data.id
+  When method get
+  Then status 200
+  * def grpResponse = response
+
+
+  * print 'edit the affiliate response and PUT it.  Should return 200 but not do anything.  Disallowed at this endpoint'
+  # GRP-649
+  * set grpResponse $.data.affiliates[?(@.name == 'email')].status = 'inactive'
+  Given path 'group', testgroup1.put.data.id
+  And header If-Match = '*'
+  And request grpResponse
+  When method put
+  Then status 200
+
+  # get and see
+  * print 'get the group via the group edit endpoint'
+  Given path 'group', testgroup1.put.data.id
+  When method get
+  Then status 200
+
 
 
   * print 'delete the group'

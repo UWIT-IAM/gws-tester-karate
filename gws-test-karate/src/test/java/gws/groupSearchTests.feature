@@ -6,7 +6,7 @@ Feature: group search tests
     * url BaseURL
     * configure headers = { 'Accept': 'application/json' ,'Content-type': 'application/json'}
     * def groupid = BaseGroup + 'search'
-    * def certid = CertificateNode
+    * def certid = AuthCertificateNode
     * def netidadmin = AdminNetidUser
     # etag is just a timestamp in milliseconds.  This range is good 02/2018 through sometime in 2038
     * def minEtag = 1518736574921
