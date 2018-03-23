@@ -64,6 +64,9 @@ Feature: basic group manipulation tests
     When method put
     Then status 200
 
+
+
+
   # clean up
   Given path 'group', groupid
   When method delete
