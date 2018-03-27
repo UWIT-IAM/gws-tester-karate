@@ -67,7 +67,7 @@ And request payload
 When method put
 Then status 200
 # notFound should be blank
-And match response.response.notFound == []
+And match response.errors[0].notFound == []
 
 
   # delete group

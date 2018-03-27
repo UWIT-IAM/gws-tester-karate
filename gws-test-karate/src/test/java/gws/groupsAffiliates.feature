@@ -76,6 +76,14 @@ Then status 201
   And match response.data.status == 'inactive'
   And match response.data.senders == []
 
+  * print 'verify google affiliate with inactive status not returned in search results'
+  Given path 'search'
+  Given param affiliate = 'google'
+  # karate requires payload for put, but GWS doesn't require one
+  When method get
+  Then status 200
+  And match response.data[*].id !contains testgroup2.put.data.id
+
 * print 'update google affiliate 1 to active status'
 Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_1.name
 Given param status = members.google_affiliate_1.status
@@ -115,7 +123,7 @@ When method put
 Then status 200
 
 
-  * print 'affiliate search is successful'
+  * print 'affiliate search is successful (e.g. google affiliate with active status is returned in search results)'
   Given path 'search'
   Given param affiliate = 'google'
   # karate requires payload for put, but GWS doesn't require one

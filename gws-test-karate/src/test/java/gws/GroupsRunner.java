@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @RunWith(Karate.class)
 //to run only a single feature
 //@CucumberOptions(features = "classpath:gws/groupsBasic.feature")
-@CucumberOptions(features = "classpath:gws/groupsRename.feature")
+@CucumberOptions(features = "classpath:gws/groupsAffiliates.feature")
 public class GroupsRunner {
 
 }

@@ -51,7 +51,7 @@ Feature: Membership View Control Tests
     When method put
     Then status 200
    # notFound should be blank--it's the members that weren't able to be added because they don't exist
-    And match response.response.notFound == []
+    And match response.errors[0].notFound == []
 
   Scenario: Try to read group with unauthorized cert is denied
 
