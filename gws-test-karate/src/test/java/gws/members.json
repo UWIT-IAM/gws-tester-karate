@@ -23,6 +23,20 @@
       "id": "lisas22g"
     }
   ],
+  "members3": [
+    {
+      "type": "uwnetid",
+      "id": "joeuser"
+    },
+    {
+      "type": "uwnetid",
+      "id": "lisas22g"
+    },
+    {
+      "type": "dns",
+      "id": "group-test-noaccess.cac.washington.edu"
+    }
+  ],
   "google_affiliate_1": {
     "name": "google",
     "status": "active",

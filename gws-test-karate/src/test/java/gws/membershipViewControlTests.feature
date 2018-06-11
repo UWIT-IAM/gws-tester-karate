@@ -1,3 +1,4 @@
+# ported from uwebinject
 Feature: Membership View Control Tests
 
   Background:
@@ -8,6 +9,7 @@ Feature: Membership View Control Tests
     * def members = read('members.json')
     * def groupid = BaseGroup + 'memberview-certauth'
     * def readergroup = BaseGroup + 'memberview-authreadergroup'
+    * def authgroup = BaseGroup + 'memberview-authgroup'
     * def certid = AuthCertificateNode
     * def netidadmin = AdminNetidUser
     * def getTime =
@@ -15,6 +17,13 @@ Feature: Membership View Control Tests
   function() {return Date.now();}
   """
     * def start_time = getTime()
+    * def makeDelay =
+  """
+  function(x) {
+    java.lang.Thread.sleep(x);
+    karate.log('sleeping');
+  }
+  """
 
 
   Scenario: Create test group with authorized cert as reader
@@ -23,8 +32,12 @@ Feature: Membership View Control Tests
     # clean up
     Given path 'group', groupid
     When method delete
+    Given path 'group', readergroup
+    When method delete
+    Given path 'group', authgroup
+    When method delete
 
-    * print 'Create group is successful'
+    * print 'Build the authorized subgroup is successful'
     * def payload =
     """
     {
@@ -97,9 +110,120 @@ Feature: Membership View Control Tests
     Then status 200
 
 
+  Scenario: back to authorized cert and create reader group
+
+    # #6 in webinject
+    * print 'Create group to be group member reader'
+    * def payload =
+    """
+    {
+      data: {
+      id: '#(readergroup)',
+      description: unit testing - subgroup functions - authorized,
+      admins: [ '#(certid)','#(netidadmin)' ]
+      }
+    }
+    """
+    Given path 'group', readergroup
+    And request payload
+    When method put
+    Then status 201
+
+
+    * print 'Put membership succeeds--noauth cert as member of reader group'
+      # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
+    Given path 'group', readergroup, 'member', '/'
+    And param synchronized = ''
+    * def payload = { data: '#(members.members3)' }
+    And request payload
+    And header If-Match = '*'
+    When method put
+    Then status 200
+   # notFound should be blank--it's the members that weren't able to be added because they don't exist
+    And match response.errors[0].notFound == []
+
+    * print 'Create subgroup (authgroup) with readergroup as member reader'
+    * def payload =
+    """
+    {
+      data: {
+      id: '#(authgroup)',
+      description: unit testing - subgroup functions - authorized,
+      admins: [ '#(certid)','#(netidadmin)' ],
+      readers:  [{"type":"group","id": '#(readergroup)'}]
+      }
+    }
+    """
+    Given path 'group', authgroup
+    And request payload
+    When method put
+    Then status 201
+
+    # #9 in webinject
+    * print 'Put some membership into authgroup succeeds'
+      # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
+    Given path 'group', authgroup, 'member', '/'
+    And param synchronized = ''
+    * def payload = { data: '#(members.members2)' }
+    And request payload
+    And header If-Match = '*'
+    When method put
+    Then status 200
+   # notFound should be blank--it's the members that weren't able to be added because they don't exist
+    And match response.errors[0].notFound == []
+
+  Scenario: unauthorized cert SSL config -- view with unauth cert
+ # pull different cert from karate-config.js
+    * configure ssl = NoAccessConfig
+
+    * print 'Viewing the auth group membership is allowed via group membership'
+    Given path 'group', authgroup, 'member'
+    And param source = 'registry'
+    When method get
+    Then status 200
+
+  Scenario: modify membership using auth cert
+
+    * print 'remove unauth cert from reader group'
+      # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
+    Given path 'group', readergroup, 'member', '/'
+    And param synchronized = ''
+    * def payload = { data: '#(members.members2)' }
+    And request payload
+    And header If-Match = '*'
+    When method put
+    Then status 200
+   # notFound should be blank--it's the members that weren't able to be added because they don't exist
+    And match response.errors[0].notFound == []
+    # we need to wait a bit for it to catch up, even with synchronize
+   * call makeDelay 5000
+
+  Scenario: unauthorized cert SSL config -- view with unauth cert
+
+    # 12 in uwebinject
+ # pull different cert from karate-config.js
+    * configure ssl = NoAccessConfig
+
+    * print 'Viewing the auth group membership is denied via group membership now that unauth cert is removed'
+    Given path 'group', authgroup, 'member'
+    # I don't know why we don't use source=registry here...copying from Salnick's tester.  mattjm 20180611
+    When method get
+    Then status 401
+
+
+
   Scenario:  clean up - delete group
 
    # clean up
     Given path 'group', groupid
+    When method delete
+    Then status 200
+
+
+    Given path 'group', readergroup
+    When method delete
+    Then status 200
+
+    Given path 'group', authgroup
     When method delete
     Then status 200

@@ -1,2 +1,3 @@
 *.pfx
+*.pkcs12
 karate-config.js

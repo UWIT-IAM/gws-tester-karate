@@ -40,7 +40,7 @@ Scenario: Create, verify, and delete a group
   And match response.data.updaters[*] contains testgroup1.put.data.updaters[0]
   And match response.data.dependsOn contains testgroup1.put.data.dependsOn
 
-  * print 'add an affiliate--testing some permissions'
+  * print 'add an affiliate--testing some permissions on the main group edit endpoint'
   Given path 'group', testgroup1.put.data.id, 'affiliate', members.email_affiliate_1.name
   Given param status = members.email_affiliate_1.status
   And param sender = members.email_affiliate_1.senders
@@ -57,7 +57,7 @@ Scenario: Create, verify, and delete a group
   * def grpResponse = response
 
 
-  * print 'edit the affiliate response and PUT it.  Should return 200 but not do anything.  Disallowed at this endpoint'
+  * print 'edit the affiliate response and PUT it.  Should return 200 but not do anything.  Affiliate operations disallowed at this endpoint'
   # GRP-649
   * set grpResponse $.data.affiliates[?(@.name == 'email')].status = 'inactive'
   Given path 'group', testgroup1.put.data.id
@@ -65,12 +65,18 @@ Scenario: Create, verify, and delete a group
   And request grpResponse
   When method put
   Then status 200
+  * def temp = get[0] response.data.affiliates[?(@.name == 'email')]
+  And match temp.status == 'active'
 
   # get and see
   * print 'get the group via the group edit endpoint'
   Given path 'group', testgroup1.put.data.id
   When method get
   Then status 200
+  * def temp = get[0] response.data.affiliates[?(@.name == 'email')]
+  And match temp.status == 'active'
+
+  # TODO delete member from group that has multiple members
 
 
 

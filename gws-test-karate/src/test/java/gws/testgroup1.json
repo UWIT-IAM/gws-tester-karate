@@ -8,7 +8,7 @@
       "regid": "#? _.length == 32",
       "created": "#? _ > start_time",
       "lastModified": "#? _ > start_time",
-      "lastMemberModified": "0",
+      "lastMemberModified": 0,
       "gid": "#? _ > 0"
     }
   },
