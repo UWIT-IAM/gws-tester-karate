@@ -1,4 +1,4 @@
-# ported from Jim's Python tester
+# ported from uwebinject
 Feature: Group Rename Tests
 
 Background:
