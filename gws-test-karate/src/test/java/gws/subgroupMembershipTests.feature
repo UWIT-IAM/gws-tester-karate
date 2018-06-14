@@ -165,9 +165,11 @@ Feature: subgroup membership updatertests
     * print 'clean up'
     # clean up
     Given path 'group', groupauth
+    And header If-Match = '*'
     When method delete
 
     * print 'clean up'
     # clean up
     Given path 'group', groupnoauth
+    And header If-Match = '*'
     When method delete
