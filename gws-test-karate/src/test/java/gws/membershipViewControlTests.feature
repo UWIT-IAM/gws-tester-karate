@@ -200,7 +200,6 @@ Feature: Membership View Control Tests
 
   Scenario: unauthorized cert SSL config -- view with unauth cert
 
-    # 12 in uwebinject
  # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
 

@@ -43,7 +43,7 @@ Feature: group history tests
       id: '#(groupid)',
       description: Unit Testing: history functions: authorized group,
       admins: [ '#(netidadmin)' ],
-      readers:  ['#(certid)', '#(UnAuthCertificateNode)']
+      readers:  ['#(certid)']
             }
     }
     """
@@ -56,6 +56,7 @@ Feature: group history tests
     * print 'Add membership succeds'
       # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
     Given path 'group', groupid, 'member'
+    And param synchronized = ''
     * def payload = { data: '#(members.members2)' }
     And request payload
     And header If-Match = '*'
