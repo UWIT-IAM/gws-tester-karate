@@ -42,8 +42,8 @@ Feature: group history tests
       data: {
       id: '#(groupid)',
       description: Unit Testing: history functions: authorized group,
-      admins: [ '#(netidadmin)' ],
-      readers:  ['#(certid)']
+      admins: [ '#(netidadmin)', '#(certid)' ],
+      readers:  ['#(certid)', '#(UnAuthCertificateNode)']
             }
     }
     """
