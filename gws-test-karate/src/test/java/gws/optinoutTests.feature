@@ -304,7 +304,7 @@ Feature: Membership Opt In/Out Tests
     * print 'Delete self membership fails with specific optin (and not optout)'
     Given path 'group', groupid, 'member'
     And param synchronized = ''
-    Amd header If-Match = '*'
+    And header If-Match = '*'
     When method delete
     Then status 401
 
