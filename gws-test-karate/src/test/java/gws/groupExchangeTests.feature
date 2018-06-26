@@ -9,7 +9,8 @@ Feature:  Group Exchange Tests
     * def members = read('members.json')
     * def exchgroup = BaseGroup + 'exchange-tests'
     * def exchgroup2 = BaseGroup + 'exchange-tests' + '_subgroup'
-    * def exchrename = BaseGroup + 'exchange-rename'
+    * def exchrenameleaf = 'exchange-rename'
+    * def exchrename = BaseGroup + exchrenameleaf
     * def netidadmin = AdminNetidUser
     * def netidadmin2 = AdminNetidUser2
     * def getTime =
@@ -29,11 +30,13 @@ Feature:  Group Exchange Tests
   Scenario: Exchange enable and disable operations
 
    # since we have child groups, order matters
+    # this one in case tests failed before rename
     * print 'Make sure clean up ran last time'
   # clean up
     Given path 'group', exchgroup2
     When method delete
 
+    #this one in case tests failed before rename
     * print 'Make sure clean up ran last time'
   # clean up
     Given path 'group', exchgroup
@@ -89,12 +92,10 @@ Feature:  Group Exchange Tests
     Then status 201
     * def etag2 = responseHeaders['ETag'][0]
 
-    # TODO this shouldn't be needed
-    * call makeDelay 5000
 
     * print 'add second group (exchange disabled) to first group (exchange disabled)'
     Given path 'group', exchgroup, 'member', 'g:' + exchgroup2
-    And param sychronized = ''
+    And param synchronized = ''
     And request ''
     When method put
     Then status 200
@@ -112,7 +113,7 @@ Feature:  Group Exchange Tests
 
     * print 'remove second group (exchange disabled) from first group (exchange disabled)'
     Given path 'group', exchgroup, 'member', 'g:' + exchgroup2
-    And param sychronized = ''
+    And param synchronized = ''
     When method delete
     Then status 200
     # Removing group SHOULD have been allowed!
@@ -153,7 +154,7 @@ Feature:  Group Exchange Tests
 
     * print 'add second group (exchange disabled) to first group (exchange enabled)'
     Given path 'group', exchgroup, 'member', 'g:' + exchgroup2
-    And param sychronized = ''
+    And param synchronized = ''
     And request ''
     When method put
     Then status 400
@@ -163,7 +164,7 @@ Feature:  Group Exchange Tests
     Given path 'group', exchgroup, 'affiliate', 'email'
     And param status = 'active'
     And param sender = 'g:' + exchgroup2
-    And param sychronized = ''
+    And param synchronized = ''
     And request ''
     When method put
     Then status 403
@@ -172,29 +173,32 @@ Feature:  Group Exchange Tests
     * print 'Exchange enable second group'
     Given path 'group', exchgroup2, 'affiliate', 'email'
     And param status = 'active'
+    And param synchronized = ''
     And header If-Match = '*'
     And request ''
     When method put
     Then status 200
     #  Update: add EmailEnabled attribute for second group *SHOULD* have been allowed!
 
-    # TODO this shouldn't be needed
+    #todo
     * call makeDelay 5000
 
-    * print 'add second group (exchange ensabled) to first group (exchange enabled)'
+    * print 'add second group (exchange enabled) to first group (exchange enabled)'
     Given path 'group', exchgroup, 'member', 'g:' + exchgroup2
-    And param sychronized = ''
+    And param synchronized = ''
     And request ''
     When method put
     Then status 200
     And match response.errors[0].notFound == []
     #  Update: add exchange-enabled group as member SHOULD have been allowed!
 
+
+
     * print 'add second group (exchange enabled) as authorized sender of first group'
     Given path 'group', exchgroup, 'affiliate', 'email'
     And param status = 'active'
     And param sender = 'g:' + exchgroup2
-    And param sychronized = ''
+    And param synchronized = ''
     And request ''
     When method put
     Then status 200
@@ -203,8 +207,21 @@ Feature:  Group Exchange Tests
 
   * print 'attempt to rename parent group'
     Given path 'groupMove', exchgroup
-    And param newext = exchrename
+    And param newext = exchrenameleaf
     And param subgroups = ''
     And request ''
     When method put
+    Then status 200
+
+
+
+    # since we have child groups, order matters
+    * print 'Make sure clean up ran last time'
+    Given path 'group', exchrename + '_subgroup'
+    When method delete
+    Then status 200
+
+    * print 'Make sure clean up ran last time'
+    Given path 'group', exchrename
+    When method delete
     Then status 200
