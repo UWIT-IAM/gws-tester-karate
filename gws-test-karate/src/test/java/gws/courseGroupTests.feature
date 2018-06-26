@@ -7,7 +7,7 @@ Feature: Course group tests
     * configure headers = { 'Accept': 'application/json' ,'Content-type': 'application/json'}
 
     * def members = read('members.json')
-    * def groupid = CourseStem
+    * def groupid = CourseStem1
     * def groupidsub = BaseGroup + 'authreadergroup_history'
     * def netidadmin = AdminNetidUser
     * def getTime =
