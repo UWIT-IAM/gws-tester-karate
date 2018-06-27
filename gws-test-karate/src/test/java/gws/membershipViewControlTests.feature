@@ -198,12 +198,13 @@ Feature: Membership View Control Tests
     # we need to wait a bit for it to catch up, even with synchronize
    * call makeDelay 5000
 
+
   Scenario: unauthorized cert SSL config -- view with unauth cert
 
  # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
 
-    * print 'Viewing the auth group membership is denied via group membership now that unauth cert is removed'
+    * print 'Viewing the auth group membership (via member endpoint) is denied via group membership now that unauth cert is removed from reader group'
     Given path 'group', authgroup, 'member'
     # I don't know why we don't use source=registry here...copying from Salnick's tester.  mattjm 20180611
     When method get

@@ -74,7 +74,7 @@ Feature:  Dependant Group Tests
       admins: [ '#(AuthCertificateNode)','#(netidadmin)' ],
       readers:  ['#(UnAuthCertificateNode)'],
       updaters:  ['#(UnAuthCertificateNode)'],
-      dependson:  '#(depgroup)'
+      dependsOn:  '#(depgroup)'
             }
     }
     """

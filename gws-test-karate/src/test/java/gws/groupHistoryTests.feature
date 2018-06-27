@@ -43,7 +43,7 @@ Feature: group history tests
       id: '#(groupid)',
       description: Unit Testing: history functions: authorized group,
       admins: [ '#(netidadmin)', '#(certid)' ],
-      readers:  ['#(certid)', '#(UnAuthCertificateNode)']
+      readers:  ['#(certid)']
             }
     }
     """
@@ -72,6 +72,8 @@ Feature: group history tests
     * def member2id = 'add member: ' + "'" + members.members2[1].id + "'"
     And match response.data[*].description contains ['#(member1id)', '#(member2id)']
 
+    * call makeDelay 5000
+
     * print 'DEBUG GET THE GROUP PROPERTIES'
     Given path 'group', groupid,
     When method get
@@ -81,16 +83,19 @@ Feature: group history tests
     * configure ssl = NoAccessConfig
 
     * print 'Unauthorized viewing of the group membership history is prevented'
+    # note some history always comes back, but membership history should not
     Given path 'group', groupid, 'history'
     When method get
     Then status 200
+    And match response.data[*].description !contains 'add member:'
+
 
   Scenario:  Switch back to auth cert
 
-    * print 'Make sure clean up ran last time'
     # clean up
     Given path 'group', groupid
     And header If-Match = '*'
-   # When method delete
+    When method delete
+    Then status 200
 
 
