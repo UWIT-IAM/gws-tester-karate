@@ -27,7 +27,7 @@ Feature: subgroup creator tests
   """
 
 
-  Scenario: Group read and edit tests
+  Scenario: subgroup creator tests--Group read and edit tests
 
     * print 'Make sure clean up ran last time'
     # clean up
@@ -68,7 +68,7 @@ Feature: subgroup creator tests
     When method put
     Then status 201
 
-  Scenario:  Switch to unauth cert
+  Scenario:  subgroup creator tests--Switch to unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'Building a subgroup when authorized succeeds'
@@ -87,7 +87,7 @@ Feature: subgroup creator tests
     When method put
     Then status 201
 
-  Scenario:  Switch to auth cert
+  Scenario:  subgroup creator tests--Switch to auth cert
 
     * print 'Cleanup - delete subgroup'
     Given path 'group', groupauthtest
@@ -119,7 +119,7 @@ Feature: subgroup creator tests
     When method put
     Then status 201
 
-  Scenario:  Switch to unauth cert
+  Scenario:  subgroup creator tests--Switch to unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'Building a subgroup when NOT authorized fails'
@@ -138,7 +138,7 @@ Feature: subgroup creator tests
     When method put
     Then status 401
 
-  Scenario:  Switch to auth cert
+  Scenario:  subgroup creator tests--Switch to auth cert
 
     * print 'Cleanup: delete unauthorized subgroup succeeds'
     Given path 'group', groupnoauth

@@ -52,7 +52,7 @@ Feature: Membership Opt In/Out Tests
     When method put
     Then status 201
 
-  Scenario: Unauth cert
+  Scenario: Membership Opt In/Out Tests--Unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'PUT self membership succeeds with optin (and not optout)'
@@ -83,7 +83,7 @@ Feature: Membership Opt In/Out Tests
     When method delete
     Then status 401
 
-    Scenario:  Back to auth cert
+    Scenario:  Membership Opt In/Out Tests--Back to auth cert
 
     * print 'delete subgroup'
     # clean up
@@ -111,7 +111,7 @@ Feature: Membership Opt In/Out Tests
     When method put
     Then status 201
 
-  Scenario: Unauth cert
+  Scenario: Membership Opt In/Out Tests--Unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'PUT self membership fails with optout (and not optin)'
@@ -132,7 +132,7 @@ Feature: Membership Opt In/Out Tests
     When method put
     Then status 401
 
-  Scenario: back to auth cert
+  Scenario: Membership Opt In/Out Tests--back to auth cert
 
     * print 'PUT membership as admin succeeds'
     Given path 'group', groupid, 'member'
@@ -143,7 +143,7 @@ Feature: Membership Opt In/Out Tests
     When method put
     Then status 200
 
-  Scenario: unauth cert
+  Scenario: Membership Opt In/Out Tests--unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'Delete self membership succeeds with optout (and not optin)'
@@ -153,7 +153,7 @@ Feature: Membership Opt In/Out Tests
     When method delete
     Then status 200
 
-  Scenario:  Back to auth cert
+  Scenario:  Membership Opt In/Out Tests--Back to auth cert
 
     * print 'delete subgroup'
   # clean up
@@ -190,7 +190,7 @@ Feature: Membership Opt In/Out Tests
     When method put
     Then status 200
 
-  Scenario: unauth cert
+  Scenario: Membership Opt In/Out Tests--unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'Delete self membership succeeds with recursive optout'
@@ -200,7 +200,7 @@ Feature: Membership Opt In/Out Tests
     When method delete
     Then status 200
 
-  Scenario: auth cert
+  Scenario: Membership Opt In/Out Tests--auth cert
 
     * print 'delete subgroup'
   # clean up
@@ -230,7 +230,7 @@ Feature: Membership Opt In/Out Tests
     Then status 201
 
 
-  Scenario: unauth cert
+  Scenario: Membership Opt In/Out Tests--unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'PUT self membership fails with recursive optin when not member of optin group'
@@ -241,7 +241,7 @@ Feature: Membership Opt In/Out Tests
     When method put
     Then status 401
 
-  Scenario: auth cert
+  Scenario: Membership Opt In/Out Tests--auth cert
 
     #webinject #41
     * print 'PUT membership as admin succeeds'
@@ -280,7 +280,7 @@ Feature: Membership Opt In/Out Tests
     Then status 201
 
 
-  Scenario: unauth cert
+  Scenario: Membership Opt In/Out Tests--unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'PUT self membership succeeds with specific optin (and not optout)"'
@@ -308,7 +308,7 @@ Feature: Membership Opt In/Out Tests
     When method delete
     Then status 401
 
-  Scenario: auth cert
+  Scenario: Membership Opt In/Out Tests--auth cert
 
     * print 'delete subgroup'
     Given path 'group', groupid

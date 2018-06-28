@@ -24,7 +24,7 @@ Feature: Course group tests
   """
 
 
-  Scenario: Course group tests--unauth
+  Scenario: Course group tests--unauthorized cert
     # start with unauth cert
     * configure ssl = NoAccessConfig
 
@@ -40,7 +40,7 @@ Feature: Course group tests
     Then status 200
     And match response.data[*].description !contains '#regex add member:.*'
 
-  Scenario: Course group tests--auth
+  Scenario: Course group tests--authorized cert
 
     * print 'Viewing the group membership is authorized via cert'
     Given path 'group', groupid, 'member'

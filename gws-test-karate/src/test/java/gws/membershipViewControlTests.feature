@@ -26,7 +26,7 @@ Feature: Membership View Control Tests
   """
 
 
-  Scenario: Create test group with authorized cert as reader
+  Scenario: Membership View Control Tests--Create test group with authorized cert as reader
 
     * print 'Make sure clean up ran last time'
     # clean up
@@ -66,7 +66,7 @@ Feature: Membership View Control Tests
    # notFound should be blank--it's the members that weren't able to be added because they don't exist
     And match response.errors[0].notFound == []
 
-  Scenario: Try to read group with unauthorized cert is denied
+  Scenario: Membership View Control Tests--Try to read group with unauthorized cert is denied
 
     # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
@@ -79,7 +79,7 @@ Feature: Membership View Control Tests
     # make sure data is not returned (key should not even be returned)
     And match response contains { data: '#notpresent' }
 
-  Scenario: Add unauthorized cert as reader
+  Scenario: Membership View Control Tests--Add unauthorized cert as reader
     * def payload =
     """
     {
@@ -98,7 +98,7 @@ Feature: Membership View Control Tests
     Then status 200
 
 
-  Scenario: Try to read group with previously unauthorized cert is successful
+  Scenario: Membership View Control Tests--Try to read group with previously unauthorized cert is successful
 
   # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
@@ -110,7 +110,7 @@ Feature: Membership View Control Tests
     Then status 200
 
 
-  Scenario: back to authorized cert and create reader group
+  Scenario: Membership View Control Tests--back to authorized cert and create reader group
 
     # #6 in webinject
     * print 'Create group to be group member reader'
@@ -172,7 +172,7 @@ Feature: Membership View Control Tests
    # notFound should be blank--it's the members that weren't able to be added because they don't exist
     And match response.errors[0].notFound == []
 
-  Scenario: unauthorized cert SSL config -- view with unauth cert
+  Scenario: Membership View Control Tests--unauthorized cert SSL config -- view with unauth cert
  # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
 
@@ -182,7 +182,7 @@ Feature: Membership View Control Tests
     When method get
     Then status 200
 
-  Scenario: modify membership using auth cert
+  Scenario: Membership View Control Tests--modify membership using auth cert
 
     * print 'remove unauth cert from reader group'
       # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
@@ -199,7 +199,7 @@ Feature: Membership View Control Tests
    * call makeDelay 5000
 
 
-  Scenario: unauthorized cert SSL config -- view with unauth cert
+  Scenario: Membership View Control Tests--unauthorized cert SSL config -- view with unauth cert
 
  # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
@@ -212,7 +212,7 @@ Feature: Membership View Control Tests
 
 
 
-  Scenario:  clean up - delete group
+  Scenario:  Membership View Control Tests--auth cert--clean up - delete group
 
    # clean up
     Given path 'group', groupid

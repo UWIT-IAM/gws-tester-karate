@@ -1,5 +1,5 @@
 # ported from uwebinject
-Feature: subgroup membership updatertests
+Feature: subgroup membership updater tests
 
   Background:
 
@@ -26,7 +26,7 @@ Feature: subgroup membership updatertests
   """
 
 
-  Scenario: Group read and edit tests
+  Scenario: subgroup membership updater tests--Group read and edit tests
 
     * print 'Make sure clean up ran last time'
     # clean up
@@ -127,7 +127,7 @@ Feature: subgroup membership updatertests
     * def netid = 'joeuser'
     And match netid == get[0] response.data[?(@.id == 'joeuser')].id
 
-    Scenario:  back to authorized cert
+    Scenario:  subgroup membership updater tests--back to authorized cert
 
       # not with other recursion tests because we want to do these
       # after members have been added
@@ -211,7 +211,7 @@ Feature: subgroup membership updatertests
       Then status 201
 
 
-  Scenario:  Switch to unauth cert
+  Scenario:  subgroup membership updater tests--Switch to unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'Unauthorized PUT membership is prevented'
@@ -223,7 +223,7 @@ Feature: subgroup membership updatertests
     When method put
     Then status 401
 
-  Scenario:  back to authorized cert
+  Scenario:  subgroup membership updater tests--back to authorized cert
 
     * print 'Authorized PUT membership succeeds'
       # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)

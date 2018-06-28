@@ -26,7 +26,7 @@ Feature: membership manipulation tests
   """
 
 
-  Scenario: Group read and edit tests
+  Scenario: membership manipulation tests--Group read and edit tests
 
     * print 'Make sure clean up ran last time'
     # clean up
@@ -63,7 +63,7 @@ Feature: membership manipulation tests
    # notFound should be blank--it's the members that weren't able to be added because they don't exist
     And match response.errors[0].notFound == []
 
-  Scenario: unauthorized cert SSL config -- view with unauth cert
+  Scenario: membership manipulation tests--unauth cert
     # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
 
@@ -87,7 +87,7 @@ Feature: membership manipulation tests
     When method put
     Then status 401
 
-  Scenario: back to authorized SSL config for more tests
+  Scenario: membership manipulation tests--auth cert
 
     # since we switched to a new scenario parsedresult was reset...
     # we need another get....
@@ -147,7 +147,7 @@ Feature: membership manipulation tests
     When method put
     Then status 200
 
-  Scenario: unauthorized cert SSL config -- update members with unauth cert as member updater
+  Scenario: membership manipulation tests--update members with unauth cert as member updater
     # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
 
@@ -198,7 +198,7 @@ Feature: membership manipulation tests
     And match members !contains ['mattjm']
 
 
-  Scenario: back to authorized SSL config for cleanup
+  Scenario: membership manipulation tests--back to authorized SSL config for cleanup
 
     * print 'delete the test group'
     Given path 'group', groupid

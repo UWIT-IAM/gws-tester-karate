@@ -25,7 +25,7 @@ Feature: group history tests
   """
 
 
-  Scenario: Group history tests
+  Scenario: Group history tests--auth cert
 
     * print 'Make sure clean up ran last time'
     # clean up
@@ -79,7 +79,7 @@ Feature: group history tests
     When method get
     Then status 200
 
-  Scenario:  Switch to unauth cert
+  Scenario:  Group history tests--unauth cert
     * configure ssl = NoAccessConfig
 
     * print 'Unauthorized viewing of the group membership history is prevented'
@@ -90,7 +90,7 @@ Feature: group history tests
     And match response.data[*].description !contains 'add member:'
 
 
-  Scenario:  Switch back to auth cert
+  Scenario:  Group history tests--auth cert
 
     # clean up
     Given path 'group', groupid
