@@ -87,6 +87,7 @@ Feature:  Dependant Group Tests
     * print 'PUT authorized main membership succeeds'
     Given path 'group', maingroup, 'member'
     * def payload = {data: ['#(UnAuthCertificateNode)']}
+    And param synchronized = ''
     And request payload
     And header If-Match = '*'
     When method put
@@ -109,15 +110,45 @@ Feature:  Dependant Group Tests
     * print 'Delete member from main group succeeds'
     Given path 'group', maingroup, 'member', 'd:' + UnAuthCertificateNode.id
     And header If-Match = '*'
+    And param synchronized = ''
     When method delete
     Then status 200
 
-    * print 'PUT unauthorized membership intomain membership succeeds'
+    # webinject #10
+    * print 'Confirm member is not found in the membership after delete'
+    Given path 'group', maingroup, 'member'
+    When method get
+    Then status 200
+    And match response.data == []
+
+    * print 'PUT unauthorized single member into main is prevented'
+    Given path 'group', maingroup, 'member', 'd:' + UnAuthCertificateNode.id
+    And header If-Match = '*'
+    And param synchronized = ''
+    And request ''
+    When method put
+    Then status 200
+    And match response.errors[0].notFound == [ 'group-test-noaccess.cac.washington.edu' ]
+
+    * print 'PUT unauthorized membership into main is prevented'
     Given path 'group', maingroup, 'member'
     * def payload = {data: ['#(UnAuthCertificateNode)']}
+    And param synchronized = ''
     And request payload
     And header If-Match = '*'
     When method put
     Then status 200
-    And match response.errors[0].notFound == []
+    And match response.errors[0].notFound == [ 'group-test-noaccess.cac.washington.edu' ]
+
+    # webinject #10
+    * print 'Member is not found in the membership'
+    Given path 'group', maingroup, 'member'
+    When method get
+    Then status 200
+    And match response.data == []
+
+    # clean up
+    Given path 'group', depgroup
+    When method delete
+    Then status 200
 
