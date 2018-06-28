@@ -60,10 +60,10 @@ Feature:  Dependant Group Tests
     * def payload = { data: ['#(UnAuthCertificateNode)'] }
     And request payload
     And header If-Match = '*'
-    # note this is a post not a put
     When method put
     Then status 200
 
+    # webinject #3
     * print 'Build the main group is successful'
     * def payload =
     """
@@ -83,3 +83,41 @@ Feature:  Dependant Group Tests
     And request payload
     When method put
     Then status 201
+
+    * print 'PUT authorized main membership succeeds'
+    Given path 'group', maingroup, 'member'
+    * def payload = {data: ['#(UnAuthCertificateNode)']}
+    And request payload
+    And header If-Match = '*'
+    When method put
+    Then status 200
+    And match response.errors[0].notFound == []
+
+    # webinject #5
+    * print 'Newly added member is found in the membership'
+    Given path 'group', maingroup, 'member'
+    When method get
+    Then status 200
+    And match response.data[0].id == UnAuthCertificateNode.id
+
+    * print 'Delete member from dep group succeeds'
+    Given path 'group', depgroup, 'member', 'd:' + UnAuthCertificateNode.id
+    And header If-Match = '*'
+    When method delete
+    Then status 200
+
+    * print 'Delete member from main group succeeds'
+    Given path 'group', maingroup, 'member', 'd:' + UnAuthCertificateNode.id
+    And header If-Match = '*'
+    When method delete
+    Then status 200
+
+    * print 'PUT unauthorized membership intomain membership succeeds'
+    Given path 'group', maingroup, 'member'
+    * def payload = {data: ['#(UnAuthCertificateNode)']}
+    And request payload
+    And header If-Match = '*'
+    When method put
+    Then status 200
+    And match response.errors[0].notFound == []
+
