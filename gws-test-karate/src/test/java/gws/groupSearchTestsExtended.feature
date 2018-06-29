@@ -1,5 +1,5 @@
 #ported from uwebinject
-Feature:  Group Search Tests 2.1.7
+Feature:  Group Search Tests 2 point 1 point 7
 
   Background:
 
@@ -24,7 +24,7 @@ Feature:  Group Search Tests 2.1.7
   """
 
 
-  Scenario: Group Search Tests 2.1.7
+  Scenario: Group Search Tests 2 point 1 point 7
 
 
     * print 'GID tests: Group search properly handles gid'
@@ -90,7 +90,7 @@ Feature:  Group Search Tests 2.1.7
     And param name = 'uw_affil'
     When method get
     Then status 200
-    And match response.data = []
+    And match response.data == []
 
 
 

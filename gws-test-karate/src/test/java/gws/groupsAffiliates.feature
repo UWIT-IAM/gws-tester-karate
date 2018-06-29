@@ -25,7 +25,7 @@ Background:
 
 
 
-Scenario: Create group, add affiliates and test, google_affiliate_1
+Scenario: Affiliate tests--Create group, add affiliates and test, google_affiliate_1
 
 * print 'Make sure clean up ran last time'
 Given path 'group', testgroup2.put.data.id
@@ -62,6 +62,7 @@ Then status 201
   * print 'add google affiliate 1 with inactive status'
   Given path 'group', testgroup2.put.data.id, 'affiliate', members.google_affiliate_1.name
   Given param status = 'inactive'
+  And param synchronized = ''
   And param sender = members.google_affiliate_1.senders
   # karate requires payload for put, but GWS doesn't require one
   And request ''
@@ -76,10 +77,10 @@ Then status 201
   And match response.data.status == 'inactive'
   And match response.data.senders == []
 
+
   * print 'verify google affiliate with inactive status not returned in search results'
   Given path 'search'
   Given param affiliate = 'google'
-  # karate requires payload for put, but GWS doesn't require one
   When method get
   Then status 200
   And match response.data[*].id !contains testgroup2.put.data.id

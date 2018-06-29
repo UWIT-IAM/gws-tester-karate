@@ -14,7 +14,7 @@ Feature: group member manipulation tests
     * def start_time = getTime()
 
 
-Scenario: Create group, add members, change members, verify,
+Scenario: groupsMembers--Create group, add members, change members, verify,
 
   # delete group before starting
   Given path 'group', testgroup2.put.data.id
