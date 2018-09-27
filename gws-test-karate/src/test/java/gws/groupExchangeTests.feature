@@ -138,7 +138,8 @@ Feature:  Group Exchange Tests
       data: {
       id: '#(exchgroup)',
       description: karate exchange testing,
-      admins: [ '#(AuthCertificateNode)','#(netidadmin2)' ]
+      admins: [ '#(AuthCertificateNode)','#(netidadmin2)' ],
+      contact: ""
             }
     }
     """
@@ -148,7 +149,6 @@ Feature:  Group Exchange Tests
     And header If-Match = '*'
     When method put
     Then status 200
-    #TODO is removing the contact key the right way to do this?
     And match response.data.contact == ''
     # Update: remove contact attribute for exchange enabled group *SHOULD* have been allowed!
 

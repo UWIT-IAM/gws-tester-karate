@@ -121,6 +121,21 @@ Feature:  Dependant Group Tests
     Then status 200
     And match response.data == []
 
+
+
+    * print 'PUT unauthorized membership into main is prevented'
+    Given path 'group', maingroup, 'member'
+    * def payload = {data: ['#(UnAuthCertificateNode)']}
+    And request payload
+    And header If-Match = '*'
+    # used to cause timeout...apparently fixed as of 2018-09-25
+    And param synchronized = ''
+    When method put
+    Then status 200
+    And match response.errors[0].notFound == [ 'group-test-noaccess.cac.washington.edu' ]
+    * call makeDelay 1000
+    * print response
+
     * print 'PUT unauthorized single member into main is prevented'
     Given path 'group', maingroup, 'member', 'd:' + UnAuthCertificateNode.id
     And header If-Match = '*'
@@ -129,16 +144,7 @@ Feature:  Dependant Group Tests
     When method put
     Then status 200
     And match response.errors[0].notFound == [ 'group-test-noaccess.cac.washington.edu' ]
-
-    * print 'PUT unauthorized membership into main is prevented'
-    Given path 'group', maingroup, 'member'
-    * def payload = {data: ['#(UnAuthCertificateNode)']}
-    And param synchronized = ''
-    And request payload
-    And header If-Match = '*'
-    When method put
-    Then status 200
-    And match response.errors[0].notFound == [ 'group-test-noaccess.cac.washington.edu' ]
+    * print response
 
     # webinject #10
     * print 'Member is not found in the membership'
