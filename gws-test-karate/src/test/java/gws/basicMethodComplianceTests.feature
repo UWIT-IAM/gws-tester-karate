@@ -35,33 +35,33 @@ Feature: basic method compliance tests
     Given path ''
     And request ''
     When method post
-    Then status 405
+    Then status 400
 
     # put at root is prevented
     Given path ''
     And request ''
     When method put
-    Then status 405
+    Then status 400
 
-    # delete at root is prevented
+    * print 'delete at root is prevented'
     Given path ''
     And request ''
     When method delete
-    Then status 405
+    Then status 400
 
-    # get at group root is prevented
+    * print 'get at group root is prevented'
     Given path 'group'
     And request ''
     When method get
     Then status 400
 
-     # post at group root is prevented
+    * print 'post at group root is prevented'
     Given path 'group'
     And request ''
     When method post
     Then status 400
 
-     # put at group root is prevented
+    * print 'put at group root is prevented'
     Given path 'group'
     And request ''
     When method put
@@ -74,79 +74,80 @@ Feature: basic method compliance tests
     Then status 400
 
 
-    * print 'GET at search root is allowed'
+    * print 'GET at search root without parameters is prevented'
     Given path 'search', '/'
     Then method get
-    Then status 200
+    Then status 400
+    And match response.errors[0].detail[0] == 'Search resource requires search parameters.'
 
     * print 'post at search root is prevented'
-    #Given path 'search', '/'
-    #And request ''
-    #When method post
-    #Then status 405
+    Given path 'search', '/'
+    And request ''
+    When method post
+    Then status 405
 
     * print 'put at search root is prevented'
-    #Given path 'search', '/'
-    #And request ''
-    #When method put
-    #Then status 405
+    Given path 'search', '/'
+    And request ''
+    When method put
+    Then status 405
 
     * print 'delete at search root is prevented'
-    #Given path 'search', '/'
-    #And request ''
-    #When method delete
-    #Then status 405
+    Given path 'search', '/'
+    And request ''
+    When method delete
+    Then status 405
 
     * print 'GET at bogus root is bad request: 400'
-    #Given path 'bogus', '/'
-    #When method get
-    #Then status 400
+    Given path 'bogus', '/'
+    When method get
+    Then status 400
 
     * print 'post at bogus root is bad request: 400'
-    #Given path 'bogus', '/'
-    #And request ''
-    #When method post
-    #Then status 400
+    Given path 'bogus', '/'
+    And request ''
+    When method post
+    Then status 400
 
     * print 'PUT at bogus root is bad request: 400'
-    #Given path 'bogus', '/'
-    #And request ''
-    #When method put
-    #Then status 400
+    Given path 'bogus', '/'
+    And request ''
+    When method put
+    Then status 400
 
     * print 'delete at bogus root is bad request: 400'
-    #Given path 'bogus', '/'
-    #And request ''
-    #When method delete
-    #Then status 400
+    Given path 'bogus', '/'
+    And request ''
+    When method delete
+    Then status 400
 
 
     # malformed URL checking
    * print 'Malformed URL returns 400: baseurl/course/'
-    #Given path 'course', '/'
-    #When method get
-    #Then status 400
+    Given path 'course', '/'
+    When method get
+    Then status 400
 
     # malformed URL checking
     * print 'Malformed URL returns 400: baseurl/foo/'
     Given path 'foo', '/'
-    #When method get
-    #Then status 400
+    When method get
+    Then status 400
 
     # malformed URL checking
     * print 'Malformed URL returns 400: baseurl/group!!'
-    #Given path 'group!!'
-    #When method get
-    #Then status 400
+    Given path 'group!!'
+    When method get
+    Then status 400
 
     # malformed URL checking
     * print 'Malformed URL returns 400: baseurl/group?hi=foo'
-    #Given path 'group'
-    #And param hi = 'foo'
-    #When method get
-    #Then status 400
+    Given path 'group'
+    And param hi = 'foo'
+    When method get
+    Then status 400
 
     * print 'Malformed URL returns 400: Malformed URL returns 400: baseurl/group/../group'
     Given path 'group' , '..', 'group'
-    #When method get
-    #FThen status 400
+    When method get
+    Then status 400
