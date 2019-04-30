@@ -27,12 +27,14 @@ Feature: Groups Search
 
 # create test group 1
 Given path 'group', testgroup1.put.data.id
+And param synchronized = ''
 And request testgroup1.put
 When method put
 Then status 201
 
 # create test group 2
 Given path 'group', testgroup2.put.data.id
+And param synchronized = ''
 And request testgroup2.put
 When method put
 Then status 201
