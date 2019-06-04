@@ -1,5 +1,5 @@
 #ported from uwebinject
-Feature:  Group 2.1.7 Tests
+Feature:  Groups 2 point 1 point 7 Tests
 
   Background:
 
@@ -24,7 +24,7 @@ Feature:  Group 2.1.7 Tests
   """
 
 
-  Scenario: Group 2.1.7 Tests
+  Scenario: Groups 2 point 1 point 7 Tests
 
 
     * print 'Make sure clean up ran last time'
@@ -67,13 +67,13 @@ Feature:  Group 2.1.7 Tests
     And match response.data.gid == '#string'
     And match response.data.gid != ''
     And match response.data.gid != 42
-    
+
     * print 'Cleanup: delete is successful'
     Given path 'group', groupid
     When method delete
     Then status 200
-    
-    
+
+
     * print 'REGID testing: Create group properly handles incorrect supplied regid'
     * def payload =
     """

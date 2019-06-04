@@ -186,6 +186,7 @@ Feature: Membership View Control Tests
 
     * print 'remove unauth cert from reader group'
       # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
+    # adding these members nukes the unauth cert from the membership
     Given path 'group', readergroup, 'member', '/'
     And param synchronized = ''
     * def payload = { data: '#(members.members2)' }

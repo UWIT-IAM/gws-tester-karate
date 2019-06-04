@@ -269,17 +269,20 @@ And match response.data.affiliates[*].name contains members.google_affiliate_1.n
   When method delete
   Then status 200
 
-* print 'affiliate cleanup:  delete the group'
-Given path 'group', testgroup2.put.data.id
-When method delete
-Then status 200
 
-  * print 'Cleanup: Following group deletion, google affiliate is automatically deleted'
-  Given path 'group', testgroup2.put.data.id, 'affiliate', 'google'
-  When method get
-  Then status 404
+  #removed so Ken stops complaining
 
-  * print 'Cleanup: Following group deletion, netid affiliate is automatically deleted'
-  Given path 'group', testgroup2.put.data.id, 'affiliate', 'netid'
-  When method get
-  Then status 404
+ #* print 'affiliate cleanup:  delete the group'
+ #Given path 'group', testgroup2.put.data.id
+ #When method delete
+ #Then status 200
+
+  #* print 'Cleanup: Following group deletion, google affiliate is automatically deleted'
+  #Given path 'group', testgroup2.put.data.id, 'affiliate', 'google'
+  #When method get
+  #Then status 404
+
+  #* print 'Cleanup: Following group deletion, netid affiliate is automatically deleted'
+  #Given path 'group', testgroup2.put.data.id, 'affiliate', 'netid'
+  #When method get
+  #Then status 404

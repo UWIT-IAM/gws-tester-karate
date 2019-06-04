@@ -41,6 +41,14 @@ Scenario: subgroup rename/relocate tests
   When method delete
 
   * print 'Make sure clean up ran last time'
+  Given path 'group', groupid + '_renamedstem' + '_subgroup'
+  When method delete
+
+  * print 'Make sure clean up ran last time'
+  Given path 'group', groupid + '_renamedstem'
+  When method delete
+
+  * print 'Make sure clean up ran last time'
   Given path 'group', groupid
   When method delete
 

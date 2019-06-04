@@ -6,36 +6,56 @@ function() {
   }
   var config = {
     env: env,
-    BaseURL: 'https://iam-ws.u.washington.edu/group_sws/v3',
+    //BaseURL: 'https://iam-ws.u.washington.edu:7443/group_sws/v3',
+    //BaseURL: 'https://groups.uw.edu/group_sws/v3',
+    BaseURL: 'https://dev.groups.uw.edu/group_sws/v3',
+
     BaseGroup: 'uw_iam_gws-test_',
-    CertificateNode:
+    //changes from time to time
+    CourseStem1: 'course_2018sum-phys123a',
+    CourseStem2: 'course_2018sum-phys',
+    AuthCertificateNode:
     {
         "type": "dns",
         "id": "group-test.cac.washington.edu",
         "name": "group-test.cac.washington.edu"
     },
+      UnAuthCertificateNode:
+          {
+              "type": "dns",
+              "id": "group-test-noaccess.cac.washington.edu",
+              "name": "group-test-noaccess.cac.washington.edu"
+          },
     AdminNetidUser: {
         "type": "uwnetid",
         "id": "mattjm",
         "name": "Matt MacAdam"
+    },
+      AdminNetidUser2: {
+          "type": "uwnetid",
+          "id": "fox",
+          "name": "Jim Fox"
+      },
+    NoAccessConfig: {
+        keyStore: 'classpath:group-test-noaccess.pkcs12',
+        keyStorePassword: 'secret',
+        keyStoreType: 'pkcs12',
+        trustAll: 'true'
     }
   }
   if (env == 'dev') {
-    // customize
-    // e.g. config.foo = 'bar';
+      //configure
   } else if (env == 'e2e') {
     // customize
   }
 
+    var certConfig = {
+        keyStore: 'classpath:group-test.pfx',
+        keyStorePassword: 'secret',
+        keyStoreType: 'pkcs12',
+        trustAll: 'true'};
 
-  var certConfig = {
-      keyStore: 'classpath:group-test.pfx',
-      keyStorePassword: 'secret',
-      keyStoreType: 'pkcs12',
-      trustAll: 'true'};
-
-  karate.configure('ssl', certConfig);
-
+    karate.configure('ssl', certConfig);
 
   return config;
 }

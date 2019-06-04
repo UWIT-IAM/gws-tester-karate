@@ -24,6 +24,7 @@ Scenario: groupsMembers--Create group, add members, change members, verify,
   # create group
 * print 'create the group'
 Given path 'group', testgroup2.put.data.id
+And param synchronized = ''
 And request testgroup2.put
 When method put
 Then status 201
@@ -69,6 +70,15 @@ Then status 200
 # notFound should be blank
 And match response.errors[0].notFound == []
 
+  # try to add non-existent netid
+* def fakenetid = 'notarealnetid456'
+Given path 'group', testgroup2.put.data.id, 'member', fakenetid
+And param synchronized = ''
+# karate requires payload for put, but GWS doesn't require one
+And request ''
+When method put
+Then status 200
+And match response.errors[0].notFound contains fakenetid
 
   # delete group
 Given path 'group', testgroup2.put.data.id
