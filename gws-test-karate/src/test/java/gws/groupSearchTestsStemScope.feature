@@ -51,7 +51,7 @@ Then status 200
 # search for group
 Given path 'search'
 And param scope = 'one'
-And param stem = 'uw_iam_gws-test'
+And param stem = BaseStem
 When method get
 Then status 200
 And match response.schemas contains testgroup2.schema

@@ -72,8 +72,7 @@ Feature:  Groups with periods in their names
     Given path 'group', dotgroupid
     When method get
     Then status 200
-    And match response.data.affiliates == '#[1]'
-    And match response.data.affiliates[0].senders == []
+    And match response.data.affiliates[*] !contains {"name": "google", "status": "active"}
 
     * print 'cleanup:  delete group is successful'
     Given path 'group', dotgroupid

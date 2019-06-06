@@ -4,13 +4,15 @@ function() {
   if (!env) {
     env = 'dev';
   }
+  var baseurl = 'https://gws.sandbox.iam.s.uw.edu';
+  var basestem = 'uw_iam_test-base';
   var config = {
     env: env,
-    //BaseURL: 'https://iam-ws.u.washington.edu:7443/group_sws/v3',
-    //BaseURL: 'https://groups.uw.edu/group_sws/v3',
-    BaseURL: 'https://dev.groups.uw.edu/group_sws/v3',
+    baseURL: baseurl,
+    BaseURL: baseurl + '/group_sws/v3',
 
-    BaseGroup: 'uw_iam_gws-test_',
+    BaseStem: basestem,
+    BaseGroup: basestem+ '_',
     //changes from time to time
     CourseStem1: 'course_2018sum-phys123a',
     CourseStem2: 'course_2018sum-phys',

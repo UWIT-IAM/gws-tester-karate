@@ -19,7 +19,7 @@ Feature: basic method compliance tests
 
     # GET at root is allowed
     * print 'get at root URL is allowed'
-    Given url 'https://iam-ws.u.washington.edu/group_sws'
+    Given url baseURL + '/group_sws'
     And path '/'
     When method get
     Then status 200
