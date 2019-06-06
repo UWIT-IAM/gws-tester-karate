@@ -34,7 +34,7 @@
     },
     {
       "type": "dns",
-      "id": "group-test-noaccess.cac.washington.edu"
+      "id": "#(UnAuthCertificateNode.id)"
     }
   ],
   "members4": [

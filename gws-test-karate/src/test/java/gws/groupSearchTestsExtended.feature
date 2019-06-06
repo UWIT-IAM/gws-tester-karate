@@ -29,7 +29,7 @@ Feature:  Group Search Tests 2 point 1 point 7
 
     * print 'GID tests: Group search properly handles gid'
     Given path 'search'
-    And param name = groupid
+    And param name = groupid + '*'
     When method get
     Then status 200
     And match response.data[0].regid == '#? _.length == 32'

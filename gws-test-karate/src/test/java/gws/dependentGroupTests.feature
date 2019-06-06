@@ -132,7 +132,7 @@ Feature:  Dependant Group Tests
     And param synchronized = ''
     When method put
     Then status 200
-    And match response.errors[0].notFound == [ 'group-test-noaccess.cac.washington.edu' ]
+    And match response.errors[0].notFound == [ '#(UnAuthCertificateNode.id)' ]
     * call makeDelay 1000
     * print response
 
@@ -143,7 +143,7 @@ Feature:  Dependant Group Tests
     And request ''
     When method put
     Then status 200
-    And match response.errors[0].notFound == [ 'group-test-noaccess.cac.washington.edu' ]
+    And match response.errors[0].notFound == [ '#(UnAuthCertificateNode.id)' ]
     * print response
 
     # webinject #10

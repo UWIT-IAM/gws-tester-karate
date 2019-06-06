@@ -14,7 +14,7 @@
   },
   "put": {
     "data": {
-      "id": "uw_iam_gws-test_gwstest2",
+      "id": "#(BaseGroup + 'testgroup2')",
       "displayName": "mattjm's json autotest group 2",
       "description": "This is a general purpose group for testing various Group Service functionality.",
       "contact": "mattjm",
@@ -23,8 +23,8 @@
       "admins": [
         {
           "type": "dns",
-          "id": "group-test.cac.washington.edu",
-          "name": "group-test.cac.washington.edu"
+          "id": "#(AuthCertificateNode.id)",
+          "name": "#(AuthCertificateNode.name)"
         },
         {
           "type": "uwnetid",
