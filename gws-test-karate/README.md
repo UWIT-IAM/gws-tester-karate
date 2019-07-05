@@ -17,7 +17,7 @@ You need two certs:
 * One is defined in ```var certConfig``` in karate-config.js.  This is the main "default" cert that will be used for 
 connections.  Unless you "configure ssl" in a scenario then this cert will be used.  
 * Another is defined as a key ```NoAccessConfig``` in the ```var config``` JSON blob.  This is used when we want
-to test access control by connecting with a different cert.  This is done within a scenarion by calling
+to test access control by connecting with a different cert.  This is done within a scenario by calling
 ```configure ssl = NoAccessConfig```
 
 You could define more certs if you needed them.  
@@ -59,7 +59,7 @@ report of what passed, and detailed traffic in the JSON report, but it's hard to
 
 # Notes
 
-Some test group information is stored in static files, testgroupxx.json.  These files have two main parts, "verify" and "put".  
+Some test group information is stored in various static files, testgroupxx.json.  These files have two main parts, "verify" and "put".  
 
 * "put" is the actual payload sent to the API.  
 * "verify" includes keys that aren't sent to the API but *are* returned from it.  Many of them are dynamic.  
