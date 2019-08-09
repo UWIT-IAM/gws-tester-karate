@@ -133,7 +133,6 @@ Feature:  Dependant Group Tests
     When method put
     Then status 200
     And match response.errors[0].notFound == [ '#(UnAuthCertificateNode.id)' ]
-    * call makeDelay 1000
     * print response
 
     * print 'PUT unauthorized single member into main is prevented'

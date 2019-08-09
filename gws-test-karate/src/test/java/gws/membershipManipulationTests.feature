@@ -63,6 +63,7 @@ Feature: membership manipulation tests
    # notFound should be blank--it's the members that weren't able to be added because they don't exist
     And match response.errors[0].notFound == []
 
+    # print 'membership manipulation tests--unauth cert'
   Scenario: membership manipulation tests--unauth cert
     # pull different cert from karate-config.js
     * configure ssl = NoAccessConfig
@@ -165,7 +166,7 @@ Feature: membership manipulation tests
 
     * print 'Add to the group membership is permitted (ETag from PUT)'
       # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
-    Given path 'group', groupid, 'member', 'mattjm'
+    Given path 'group', groupid, 'member', 'fox'
     And param synchronized = ''
     And request ''
     And header If-None-Match = parsedresult
@@ -178,13 +179,13 @@ Feature: membership manipulation tests
     And param source = 'registry'
     When method get
     Then status 200
-    * def netid = 'mattjm'
+    * def netid = 'fox'
     # pretty sure I'm abusing this JSONPATH syntax (note it crashes out if this user doesn't exist-- TODO make smarter)
-    And match netid == get[0] response.data[?(@.id == 'mattjm')].id
+    And match netid == get[0] response.data[?(@.id == 'fox')].id
 
 
     * print 'delete a member is permitted (ETAG *)'
-    Given path 'group', groupid, 'member', 'mattjm'
+    Given path 'group', groupid, 'member', 'fox'
     And header If-Match = '*'
     When method delete
     Then status 200
@@ -195,13 +196,5 @@ Feature: membership manipulation tests
     When method get
     Then status 200
     * def members = get response.data[*].id
-    And match members !contains ['mattjm']
+    And match members !contains ['fox']
 
-
-  Scenario: membership manipulation tests--back to authorized SSL config for cleanup
-
-    * print 'delete the test group'
-    Given path 'group', groupid
-    When method delete
-    And header If-Match = '*'
-    Then status 200

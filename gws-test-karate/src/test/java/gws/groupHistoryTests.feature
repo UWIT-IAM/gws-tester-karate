@@ -72,8 +72,6 @@ Feature: group history tests
     * def member2id = 'add member: ' + "'" + members.members2[1].id + "'"
     And match response.data[*].description contains ['#(member1id)', '#(member2id)']
 
-    * call makeDelay 5000
-
     * print 'DEBUG GET THE GROUP PROPERTIES'
     Given path 'group', groupid,
     When method get

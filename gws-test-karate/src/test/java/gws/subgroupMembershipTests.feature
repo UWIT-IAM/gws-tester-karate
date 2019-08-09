@@ -217,7 +217,7 @@ Feature: subgroup membership updater tests
     * print 'Unauthorized PUT membership is prevented'
       # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
     Given path 'group', groupnoauth, 'member'
-    * def payload = { data: [  {type: uwnetid, id: mattjm}] }
+    * def payload = { data: [  {type: uwnetid, id: fox}] }
     And request payload
     And header If-Match = '*'
     When method put
@@ -228,7 +228,7 @@ Feature: subgroup membership updater tests
     * print 'Authorized PUT membership succeeds'
       # add members via JSON payload (this removes all current members and replaces them with the ones in the payload)
     Given path 'group', groupnoauth, 'member'
-    * def payload = { data: [{type: uwnetid, id: mattjm}] }
+    * def payload = { data: [{type: uwnetid, id: fox}] }
     And request payload
     And header If-Match = '*'
     When method put

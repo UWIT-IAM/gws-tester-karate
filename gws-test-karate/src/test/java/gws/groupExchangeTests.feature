@@ -127,10 +127,6 @@ Feature:  Group Exchange Tests
     Then status 200
     #  Update: add EmailEnabled attribute *SHOULD* have been allowed!
 
-  #reporttoorig tests not ported over--Jim says no need.  --mattjm 2018-06-25
-
-  #publishemail tests not ported over--Jim says no need.  --mattjm 2018-06-25
-
     * print 'Remove contact for exchange enabled group'
     * def payload =
     """
