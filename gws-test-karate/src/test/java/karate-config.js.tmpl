@@ -4,8 +4,8 @@ function() {
   if (!env) {
     env = 'dev';
   }
-  var baseurl = 'https://gws.sandbox.iam.s.uw.edu';
-  var basestem = 'uw_iam_test-base';
+  var baseurl = 'https://dev.groups.uw.edu';
+  var basestem = 'u_fox_karate-base';
   var config = {
     env: env,
     baseURL: baseurl,
@@ -14,19 +14,19 @@ function() {
     BaseStem: basestem,
     BaseGroup: basestem+ '_',
     //changes from time to time
-    CourseStem1: 'course_2018sum-phys123a',
-    CourseStem2: 'course_2018sum-phys',
+    CourseStem1: 'course_2019sum-phys123a',
+    CourseStem2: 'course_2019sum-phys',
     AuthCertificateNode:
     {
         "type": "dns",
-        "id": "group-test.cac.washington.edu",
-        "name": "group-test.cac.washington.edu"
+        "id": "group-dev.cac.washington.edu",
+        "name": "group-dev.cac.washington.edu"
     },
       UnAuthCertificateNode:
           {
               "type": "dns",
-              "id": "group-test-noaccess.cac.washington.edu",
-              "name": "group-test-noaccess.cac.washington.edu"
+              "id": "group-dev-noaccess.cac.washington.edu",
+              "name": "group-dev-noaccess.cac.washington.edu"
           },
     AdminNetidUser: {
         "type": "uwnetid",
@@ -39,10 +39,10 @@ function() {
           "name": "Jim Fox"
       },
     NoAccessConfig: {
-        keyStore: 'classpath:group-test-noaccess.pkcs12',
-        keyStorePassword: 'secret',
+        keyStore: 'classpath:group-dev-noaccess.pfx',
+        keyStorePassword: '',
         keyStoreType: 'pkcs12',
-        trustAll: 'true'
+        trustAll: true
     }
   }
   if (env == 'dev') {
@@ -52,12 +52,14 @@ function() {
   }
 
     var certConfig = {
-        keyStore: 'classpath:group-test.pfx',
-        keyStorePassword: 'secret',
+        keyStore: 'classpath:group-dev.pfx',
+        keyStorePassword: '',
         keyStoreType: 'pkcs12',
-        trustAll: 'true'};
+        trustAll: true};
 
     karate.configure('ssl', certConfig);
+    karate.configure('connectTimeout', 60000);
+    karate.configure('readTimeout', 60000);
 
   return config;
 }

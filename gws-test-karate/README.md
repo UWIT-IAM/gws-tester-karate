@@ -20,6 +20,8 @@ connections.  Unless you "configure ssl" in a scenario then this cert will be us
 to test access control by connecting with a different cert.  This is done within a scenario by calling
 ```configure ssl = NoAccessConfig```
 
+It is best to configure the certs and keys as links to elsewhere in your filesystem.  That way you won't accidently put them in the repository.
+
 You could define more certs if you needed them.  
 
 Adjust ```basestem``` and ```baseurl``` in karate-config as appropriate.  You need to create the basestem group with 
@@ -59,6 +61,8 @@ Some test group information is stored in various static files, testgroupxx.json.
 
 * "put" is the actual payload sent to the API.  
 * "verify" includes keys that aren't sent to the API but *are* returned from it.  Many of them are dynamic.  
+
+You may have to edit the course test feature to bring it up-to-date with present courses.
 
 # Developing New Tests
 
