@@ -196,8 +196,6 @@ Feature: Membership View Control Tests
     Then status 200
    # notFound should be blank--it's the members that weren't able to be added because they don't exist
     And match response.errors[0].notFound == []
-    # we need to wait a bit for it to catch up, even with synchronize
-   * call makeDelay 5000
 
 
   Scenario: Membership View Control Tests--unauthorized cert SSL config -- view with unauth cert
@@ -207,7 +205,6 @@ Feature: Membership View Control Tests
 
     * print 'Viewing the auth group membership (via member endpoint) is denied via group membership now that unauth cert is removed from reader group'
     Given path 'group', authgroup, 'member'
-    # I don't know why we don't use source=registry here...copying from Salnick's tester.  mattjm 20180611
     When method get
     Then status 401
 

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# run test on one feature file ($1)
+
+function usage {
+  echo "usage: $0 [a feature file (no path) ]"
+  exit 1
+}
+
+path=src/test/java/gws
+file=$1
+
+[[ -z "$file" ]] && usage
+
+[[ $file == *".feature" ]] || file="$file.feature"
+
+[[ -r ${path}/${file} ]] || {
+  echo "$1 not a feature file"
+  exit 1
+}
+
+echo "Running $file test."
+mvn test -Dcucumber.options="${path}/${file}"

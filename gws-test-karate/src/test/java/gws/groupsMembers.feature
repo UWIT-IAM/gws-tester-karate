@@ -16,9 +16,9 @@ Feature: group member manipulation tests
 
 Scenario: groupsMembers--Create group, add members, change members, verify,
 
-  # delete group before starting
-  Given path 'group', testgroup2.put.data.id
-  When method delete
+# print 'cleanup before starting'
+Given path 'group', testgroup2.put.data.id
+When method delete
 
 
   # create group

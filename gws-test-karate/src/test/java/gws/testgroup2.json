@@ -15,9 +15,9 @@
   "put": {
     "data": {
       "id": "#(BaseGroup + 'testgroup2')",
-      "displayName": "mattjm's json autotest group 2",
+      "displayName": "karate json autotest group 2",
       "description": "This is a general purpose group for testing various Group Service functionality.",
-      "contact": "mattjm",
+      "contact": "fox",
       "authnFactor": "1",
       "classification": "u",
       "admins": [
@@ -28,8 +28,8 @@
         },
         {
           "type": "uwnetid",
-          "id": "mattjm",
-          "name": "Matt MacAdam"
+          "id": "fox",
+          "name": "Jim Fox"
         }
       ]
     }

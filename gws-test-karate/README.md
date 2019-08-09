@@ -22,18 +22,14 @@ to test access control by connecting with a different cert.  This is done within
 
 You could define more certs if you needed them.  
 
-Adjust ```basestem``` and ```baseurl``` in karate-config as appropriate.  You need a base group uw_iam_gws-test with 
-cert above authorized as an admin.  
+Adjust ```basestem``` and ```baseurl``` in karate-config as appropriate.  You need to create the basestem group with 
+cert above authorized as an admin.  Use the baseurl to choose between dev, eval and prod systems.
 
 Global variables to be used in tests can be put in the "var config" json blob in karate-config.  
 
 # Running a single test
 
-You can run just a single test file.  Edit ```GroupsRunner.java``` and uncomment one of the ```@CucumberOptions``` lines
-and include a path to the file that has the tests you want to run.  Only one @CucumberOptions directive can be active at
-a time (there are multiple commented out because I seem to do one-off tests of the same features a lot and
-it's easier to just uncomment the one I need).  Note this only works (I think) if you're using JUnit to run 
-GroupsRunner.java.
+Use the ```testone``` script to run a single feature test.
 
 # Running/Reading Tests
 
@@ -64,9 +60,6 @@ Some test group information is stored in various static files, testgroupxx.json.
 * "put" is the actual payload sent to the API.  
 * "verify" includes keys that aren't sent to the API but *are* returned from it.  Many of them are dynamic.  
 
-These were split to make it easier to do direct comparisons with the returned payload and avoid a lot of repetition. 
-
-
 # Developing New Tests
 
 groups_meta.feature can be called to verify the "basic" group attributes of a group.  There are some examples of this
@@ -79,7 +72,7 @@ details).
 
 Because of the tests build on one another I generally have one "scenario" with a bunch of tests in it, but this isn't
 really the way they recommend to do this.  Recommendation is a scenario should be a discreet test.  I might do
-this differently today.  
+this differently today.  (mattjm)
 
 I use scenarios heavily when certain things have to change--e.g. to change the ssl config you have to start a new 
 scenario.  
